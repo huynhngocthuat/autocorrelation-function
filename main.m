@@ -3,62 +3,116 @@ clear;
 close all;
 
 %Standard frequency
-F0mean1 = 122;
-F0std1 = 18;
-F0mean2 = 217;
-F0std2 = 23;
-F0mean3 = 113;
-F0std3 = 26;
-F0mean4 = 232;
-F0std4 = 40;
+F0mean1 = 129;
+F0std1 = 18.6;
+F0mean2 = 145;
+F0std2 = 33.7;
+F0mean3 = 155;
+F0std3 = 30.8;
+F0mean4 = 200;
+F0std4 = 46.1;
 
     %Read audio
-[x1, Fs1] = audioread('E:\Audacity\TinHieuHuanLuyen\phone_M1.wav');
-[x2, Fs2]  = audioread('E:\Audacity\TinHieuHuanLuyen\phone_F1.wav');
-[x3, Fs3] = audioread('E:\Audacity\TinHieuHuanLuyen\studio_M1.wav');
-[x4, Fs4] = audioread('E:\Audacity\TinHieuHuanLuyen\studio_F1.wav');
+[x1, Fs1] = audioread('E:\Audacity\TinHieuKiemThu\phone_M2.wav');
+[x2, Fs2]  = audioread('E:\Audacity\TinHieuKiemThu\phone_F2.wav');
+[x3, Fs3] = audioread('E:\Audacity\TinHieuKiemThu\studio_M2.wav');
+[x4, Fs4] = audioread('E:\Audacity\TinHieuKiemThu\studio_F2.wav');
 
     %Vector F0
-F1 = findFundamentalFrequency(x1, Fs1, 115, 0.03);
-F2 = findFundamentalFrequency(x2, Fs2, 18, 0.03);
-F3 = findFundamentalFrequency(x3, Fs3, 70, 0.03);
-F4 = findFundamentalFrequency(x4, Fs4, 96, 0.02);
+F1 = findFundamentalFrequency(x1, Fs1, 80);
+F2 = findFundamentalFrequency(x2, Fs2, 156);
+F3 = findFundamentalFrequency(x3, Fs3, 86);
+F4 = findFundamentalFrequency(x4, Fs4, 31);
 
-    %Flot F0
-figure;
-subplot(2,1,1);
-stem(F1, '.', 'LineStyle', 'none');
-title('phone-M1');
-xlabel('Frame');
+        %Flot F0
+    %Plot phone_M2
+figure('Name','Phone-M2','NumberTitle','off');
+subplot(3,1,1);
+plot((1:length(x1))/Fs1, x1);
+title('Input signal phone-M2 ');
+xlabel('Time(s)');
+ylabel('Amplitude');
+subplot(3,1,2);
+stem((1:length(F1))*0.025,F1,'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses autocorrelaton function');
+xlabel('Time(s)');
 ylabel('Hz');
-subplot(2,1,2);
-stem(F2, '.', 'LineStyle', 'none');
-title('phone-F1');
-xlabel('Frame');
+subplot(3,1,3);
+stem((1:length(F1))*0.025,medianFilter(F1,7),'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses medium filters');
+xlabel('Time(s)');
 ylabel('Hz');
-figure;
-subplot(2,1,1);
-stem(F3, '.', 'LineStyle', 'none');
-title('studio-M1');
-xlabel('Frame');
+    %Plot phone_F2
+figure('Name','Phone-F2','NumberTitle','off');
+subplot(3,1,1);
+plot((1:length(x2))/Fs2, x2);
+title('Input signal phone-F2 ');
+xlabel('Time(s)');
+ylabel('Amplitude');
+subplot(3,1,2);
+stem((1:length(F2))*0.025,F2,'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses autocorrelaton function');
+xlabel('Time(s)');
 ylabel('Hz');
-subplot(2,1,2);
-stem(F4, '.', 'LineStyle', 'none');
-title('studio-F1');
-xlabel('Frame');
+subplot(3,1,3);
+stem((1:length(F2))*0.025,medianFilter(F2,7),'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses medium filters');
+xlabel('Time(s)');
+ylabel('Hz');
+    %Plot studio_M2
+figure('Name','Studio-M2','NumberTitle','off');
+subplot(3,1,1);
+plot((1:length(x3))/Fs3, x3);
+title('Input signal studio-M2 ');
+xlabel('Time(s)');
+ylabel('Amplitude');
+subplot(3,1,2);
+stem((1:length(F3))*0.025,F3,'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses autocorrelaton function');
+xlabel('Time(s)');
+ylabel('Hz');
+subplot(3,1,3);
+stem((1:length(F3))*0.025,medianFilter(F3,7),'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses medium filters');
+xlabel('Time(s)');
+ylabel('Hz');
+    %Plot studio_F2
+figure('Name','Studio-F2','NumberTitle','off');
+subplot(3,1,1);
+plot((1:length(x4))/Fs4, x4);
+title('Input signal studio-F2 ');
+xlabel('Time(s)');
+ylabel('Amplitude');
+subplot(3,1,2);
+stem((1:length(F4))*0.025,F4,'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses autocorrelaton function');
+xlabel('Time(s)');
+ylabel('Hz');
+subplot(3,1,3);
+stem((1:length(F4))*0.025,medianFilter(F4,7),'.','linestyle','none');
+ylim([0 450]);
+title('F0 uses medium filters');
+xlabel('Time(s)');
 ylabel('Hz');
 
     %Fundamental frequency
-% [F01, Fstd1] = F0Average(F1, 20);
-% [F02, Fstd2] = F0Average(F2, 10);
-% [F03, Fstd3] = F0Average(F3, 20);
-% [F04, Fstd4] = F0Average(F4, 10);
+% [F01, Fstd1] = F0Average(F1);
+% [F02, Fstd2] = F0Average(F2);
+% [F03, Fstd3] = F0Average(F3);
+% [F04, Fstd4] = F0Average(F4);
 
     %Fundamental frequency use median filter
-[F01, Fstd1] = F0Average(medianFilter(F1,7), 20);
-[F02, Fstd2] = F0Average(medianFilter(F2,7), 10);
-[F03, Fstd3] = F0Average(medianFilter(F3,7), 20);
-[F04, Fstd4] = F0Average(medianFilter(F4,7), 10);
+[F01, Fstd1] = F0Average(medianFilter(F1,5));
+[F02, Fstd2] = F0Average(medianFilter(F2,5));
+[F03, Fstd3] = F0Average(medianFilter(F3,5));
+[F04, Fstd4] = F0Average(medianFilter(F4,5));
 
     %Different
 d1 = abs(F01 - F0mean1);
@@ -69,11 +123,12 @@ dstd1 = abs(Fstd1 - F0std1);
 dstd2 = abs(Fstd2 - F0std2);
 dstd3 = abs(Fstd3 - F0std3);
 dstd4 = abs(Fstd4 - F0std4);
+
     %Find fundamental frequency by autocorrelation function
     %frameIndexPhot: plot frame khong tuan hoan
     %frameIndexPhot+1: plot frame tuan hoan
-    %frameTime: xac dinh do dai cua frame
-function f  = findFundamentalFrequency(x, fs, frameIndexPlot, frameTime)
+function f  = findFundamentalFrequency(x, fs, frameIndexPlot)
+    frameTime = 0.025;
     frameLength = floor(frameTime * fs);
     totalFrame = floor(length(x)/frameLength);
     global start;
@@ -121,7 +176,7 @@ function f  = findFundamentalFrequency(x, fs, frameIndexPlot, frameTime)
                 index = i;
             end
         end
-        if(maxPeak > M(1)*0.3)%xx[n]*0.3 threshold(voice, unvoice).
+        if(maxPeak > 0.38)%xx[n]*0.38 threshold(voice, unvoice).
             f(frame) = fs/index;
         end
 
@@ -132,11 +187,11 @@ function f  = findFundamentalFrequency(x, fs, frameIndexPlot, frameTime)
 end
 
     %Function find standard deviation(F0std) and average fundamental frequency(F0)
-function [F0, F0std] = F0Average(f, index)
+function [F0, F0std] = F0Average(f)
     count = 0 ; 
     F0 = 0 ;
     F0std = 0;
-    for i = index:length(f)-20
+    for i = 1:length(f)
         if f(i) > 70 && f(i) < 450            
             F0 = F0 + f(i); 
             count = count + 1;           
@@ -145,7 +200,7 @@ function [F0, F0std] = F0Average(f, index)
     F0 = F0/count; %Average fundamental frequency
     
     count = 0;
-    for j = index:length(f)-20
+    for j = 1:length(f)
         if f(j) > 70 && f(j) < 450            
             F0std = F0std + abs(F0-f(j));
             count = count + 1;
